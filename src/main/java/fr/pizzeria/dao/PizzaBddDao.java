@@ -79,12 +79,14 @@ public class PizzaBddDao implements IPizzaDao {
 		try {
 
 			PreparedStatement updatePizza = con
-					.prepareStatement("UPDATE PIZZA (CODE, NAME, PRIX) VALUES (?, ?, ?) WHERE ID = ?");
+					.prepareStatement("UPDATE pizzas SET CODE=?, NAME=?, PRICE=? WHERE CODE =?");
 
-			updatePizza.setInt(1, pizza.getId());
-			updatePizza.setString(2, pizza.getCode());
-			updatePizza.setString(3, pizza.getLibelle());
-			updatePizza.setDouble(4, pizza.getPrix());
+			
+			updatePizza.setString(1, pizza.getCode());
+			updatePizza.setString(2, pizza.getLibelle());
+			updatePizza.setDouble(3, pizza.getPrix());
+			updatePizza.setString(4, codePizza);
+
 
 			updatePizza.executeUpdate();
 
@@ -98,7 +100,7 @@ public class PizzaBddDao implements IPizzaDao {
 	public void deletePizza(String codePizza) {
 		try {
 
-			PreparedStatement deletePizza = con.prepareStatement("DELETE PIZZA WHERE CODE = ?");
+			PreparedStatement deletePizza = con.prepareStatement("DELETE pizzas WHERE CODE = ?");
 
 			deletePizza.setString(1, codePizza);
 			deletePizza.executeUpdate();
