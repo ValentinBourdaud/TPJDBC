@@ -136,8 +136,26 @@ public class PizzaBddDao implements IPizzaDao {
 	}
 
 	public boolean pizzaExists(String codePizza) {
-		// TODO Auto-generated method stub
-		return false;
+
+		boolean pizEx = false;
+		
+		try {
+			
+			PreparedStatement pizzaExists = con.prepareStatement("SELECT * FROM PIZZAS WHERE CODE = ?");
+			
+			ResultSet resultats = pizzaExists.executeQuery();
+
+			pizzaExists.setString(1, codePizza);
+			pizEx = !resultats.wasNull();
+
+			pizzaExists.close();
+
+		} catch (SQLException e) {
+			LOG.error("SQL Exception");
+		}
+		
+		
+		return pizEx;
 	}
 
 }
