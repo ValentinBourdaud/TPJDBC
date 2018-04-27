@@ -25,12 +25,11 @@ public class PizzaBddDao implements IPizzaDao {
 			Class.forName("com.mysql.jdbc.Driver");
 
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bdd_pizzeria", "root", "");
-			con.setAutoCommit(false);
 
 		} catch (ClassNotFoundException e) {
 			LOG.error("Impossible de charger le pilote jdbc");
 		} catch (SQLException e) {
-			LOG.error("SQL Exception");
+			LOG.error("SQL Exception" + e.getMessage());
 		}
 	}
 
@@ -50,7 +49,7 @@ public class PizzaBddDao implements IPizzaDao {
 			resultats.close();
 
 		} catch (SQLException e) {
-			LOG.error("SQL Exception");
+			LOG.error("SQL Exception" + e.getMessage());
 		}
 		return listpizzas;
 
@@ -72,7 +71,7 @@ public class PizzaBddDao implements IPizzaDao {
 			saveNewPizza.close();
 
 		} catch (SQLException e) {
-			LOG.error("SQL Exception");
+			LOG.error("SQL Exception" + e.getMessage());
 		}
 	}
 
@@ -94,21 +93,21 @@ public class PizzaBddDao implements IPizzaDao {
 			updatePizza.close();
 
 		} catch (SQLException e) {
-			LOG.error("SQL Exception");
+			LOG.error("SQL Exception" + e.getMessage());
 		}
 	}
 
 	public void deletePizza(String codePizza) {
 		try {
 
-			PreparedStatement deletePizza = con.prepareStatement("DELETE pizzas WHERE CODE = ?");
+			PreparedStatement deletePizza = con.prepareStatement("DELETE FROM pizzas WHERE CODE=?");
 
 			deletePizza.setString(1, codePizza);
 			deletePizza.executeUpdate();
 			deletePizza.close();
 
 		} catch (SQLException e) {
-			LOG.error("SQL Exception");
+			LOG.error("SQL Exception " + e.getMessage());
 		}
 	}
 
@@ -118,7 +117,7 @@ public class PizzaBddDao implements IPizzaDao {
 
 		try {
 
-			PreparedStatement findPizzaByCode = con.prepareStatement("SELECT * FROM PIZZAS WHERE CODE = ?");
+			PreparedStatement findPizzaByCode = con.prepareStatement("SELECT * FROM pizzas WHERE CODE =?");
 
 			ResultSet resultats = findPizzaByCode.executeQuery();
 
@@ -130,7 +129,7 @@ public class PizzaBddDao implements IPizzaDao {
 			findPizzaByCode.close();
 
 		} catch (SQLException e) {
-			LOG.error("SQL Exception");
+			LOG.error("SQL Exception" + e.getMessage());
 		}
 
 		return piz;
@@ -142,7 +141,7 @@ public class PizzaBddDao implements IPizzaDao {
 
 		try {
 
-			PreparedStatement pizzaExists = con.prepareStatement("SELECT * FROM PIZZAS WHERE CODE = ?");
+			PreparedStatement pizzaExists = con.prepareStatement("SELECT * FROM pizzas WHERE CODE = ?");
 
 			ResultSet resultats = pizzaExists.executeQuery();
 
@@ -152,7 +151,7 @@ public class PizzaBddDao implements IPizzaDao {
 			pizzaExists.close();
 
 		} catch (SQLException e) {
-			LOG.error("SQL Exception");
+			LOG.error("SQL Exception" + e.getMessage());
 		}
 
 		return pizEx;

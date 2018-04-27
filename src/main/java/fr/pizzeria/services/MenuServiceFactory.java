@@ -15,6 +15,12 @@ public class MenuServiceFactory {
 		else if (choix==4){
 			return new SupprimerPizzaService();
 		}
+		else if (choix==5){
+			
+		
+		else if (choix==99){
+			return new AuRevoirService();
+		}
 		return null;
 	}
 }
