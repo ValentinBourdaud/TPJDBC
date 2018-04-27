@@ -60,8 +60,7 @@ public class PizzaBddDao implements IPizzaDao {
 
 		try {
 
-			PreparedStatement saveNewPizza = con
-					.prepareStatement("INSERT PIZZA WHERE ID =? AND CODE=? AND NAME=? AND PRICE=?");
+			PreparedStatement saveNewPizza = con.prepareStatement("INSERT PIZZA WHERE ID =? AND CODE=? AND NAME=? AND PRICE=?");
 
 			saveNewPizza.setInt(1, pizza.getId());
 			saveNewPizza.setString(2, pizza.getCode());
@@ -92,7 +91,7 @@ public class PizzaBddDao implements IPizzaDao {
 
 			updatePizza.close();
 
-		} catch (SQLException e) {
+		} catch (SQLException e ) {
 			LOG.error("SQL Exception");
 		}
 	}
@@ -138,11 +137,11 @@ public class PizzaBddDao implements IPizzaDao {
 	public boolean pizzaExists(String codePizza) {
 
 		boolean pizEx = false;
-		
+
 		try {
-			
+
 			PreparedStatement pizzaExists = con.prepareStatement("SELECT * FROM PIZZAS WHERE CODE = ?");
-			
+
 			ResultSet resultats = pizzaExists.executeQuery();
 
 			pizzaExists.setString(1, codePizza);
@@ -153,8 +152,7 @@ public class PizzaBddDao implements IPizzaDao {
 		} catch (SQLException e) {
 			LOG.error("SQL Exception");
 		}
-		
-		
+
 		return pizEx;
 	}
 

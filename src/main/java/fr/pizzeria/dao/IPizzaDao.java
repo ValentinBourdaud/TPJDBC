@@ -2,7 +2,10 @@ package fr.pizzeria.dao;
 
 import java.util.List;
 
+
 import fr.pizzeria.model.Pizza;
+
+
 
 public interface IPizzaDao {
 	List<Pizza> findAllPizzas();
@@ -11,5 +14,6 @@ public interface IPizzaDao {
 	void deletePizza(String codePizza);
 	Pizza findPizzaByCode(String codePizza);
 	boolean pizzaExists(String codePizza);
-}
 
+
+}
