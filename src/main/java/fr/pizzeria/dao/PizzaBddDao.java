@@ -30,6 +30,11 @@ public class PizzaBddDao implements IPizzaDao {
 			LOG.error("Impossible de charger le pilote jdbc");
 		} catch (SQLException e) {
 			LOG.error("SQL Exception" + e.getMessage());
+			try{
+				con.rollback();}
+			catch (SQLException ex){
+			LOG.error("SQL Exception" + e.getMessage());
+			}
 		}
 	}
 
@@ -47,9 +52,15 @@ public class PizzaBddDao implements IPizzaDao {
 				listpizzas.add(new Pizza(resultats.getInt("ID"), resultats.getString("CODE"),
 						resultats.getString("NAME"), resultats.getDouble("PRICE")));
 			resultats.close();
+			con.commit();
 
 		} catch (SQLException e) {
 			LOG.error("SQL Exception" + e.getMessage());
+			try{
+				con.rollback();}
+			catch (SQLException ex){
+			LOG.error("SQL Exception" + e.getMessage());
+			}
 		}
 		return listpizzas;
 
@@ -69,9 +80,15 @@ public class PizzaBddDao implements IPizzaDao {
 			saveNewPizza.executeUpdate();
 
 			saveNewPizza.close();
+			con.commit();
 
 		} catch (SQLException e) {
 			LOG.error("SQL Exception" + e.getMessage());
+			try{
+				con.rollback();}
+			catch (SQLException ex){
+			LOG.error("SQL Exception" + e.getMessage());
+			}
 		}
 	}
 
@@ -91,9 +108,15 @@ public class PizzaBddDao implements IPizzaDao {
 			updatePizza.executeUpdate();
 
 			updatePizza.close();
+			con.commit();
 
 		} catch (SQLException e) {
 			LOG.error("SQL Exception" + e.getMessage());
+			try{
+				con.rollback();}
+			catch (SQLException ex){
+			LOG.error("SQL Exception" + e.getMessage());
+			}
 		}
 	}
 
@@ -105,9 +128,15 @@ public class PizzaBddDao implements IPizzaDao {
 			deletePizza.setString(1, codePizza);
 			deletePizza.executeUpdate();
 			deletePizza.close();
+			con.commit();
 
 		} catch (SQLException e) {
 			LOG.error("SQL Exception " + e.getMessage());
+			try{
+				con.rollback();}
+			catch (SQLException ex){
+			LOG.error("SQL Exception" + e.getMessage());
+			}
 		}
 	}
 
@@ -127,9 +156,15 @@ public class PizzaBddDao implements IPizzaDao {
 
 			findPizzaByCode.executeQuery();
 			findPizzaByCode.close();
+			con.commit();
 
 		} catch (SQLException e) {
 			LOG.error("SQL Exception" + e.getMessage());
+			try{
+				con.rollback();}
+			catch (SQLException ex){
+			LOG.error("SQL Exception" + e.getMessage());
+			}
 		}
 
 		return piz;
@@ -149,9 +184,15 @@ public class PizzaBddDao implements IPizzaDao {
 			pizEx = !resultats.wasNull();
 
 			pizzaExists.close();
+			con.commit();
 
 		} catch (SQLException e) {
 			LOG.error("SQL Exception" + e.getMessage());
+			try{
+				con.rollback();}
+			catch (SQLException ex){
+			LOG.error("SQL Exception" + e.getMessage());
+			}
 		}
 
 		return pizEx;
