@@ -25,6 +25,7 @@ public class PizzaBddDao implements IPizzaDao {
 			Class.forName("com.mysql.jdbc.Driver");
 
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bdd_pizzeria", "root", "");
+			con.setAutoCommit(false);
 
 		} catch (ClassNotFoundException e) {
 			LOG.error("Impossible de charger le pilote jdbc");
