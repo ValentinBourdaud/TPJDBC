@@ -1,51 +1,138 @@
 package fr.pizzeria.dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.pizzeria.model.Pizza;
 
 public class PizzaBddDao implements IPizzaDao {
-	{
-	 try {
-	      Class.forName("com.mysql.jdbc.Drvier");
-	    } catch (ClassNotFoundException e) {
-	      System.out.println("Impossible de charger le pilote jdbc");
-	    }
-	
-	Connection con = DriverManager.getConnection("jdbc:mysql://localhost/bdd_pizzeria, «root», «»");
-	
-	PreparedStatement insertPizza = con.prepareStatement("INSERT PIZZA WHERE CODE=? AND NAME=? AND PRICE=?");
-	
 
-	insertPizza.setString(1, );
-	insertPizza.setString(1, );
-	
-	insertPizza.setDouble(1, );
+	private static final Logger LOG = LoggerFactory.getLogger(PizzaBddDao.class);
+
+	private Connection con;
+
+	public PizzaBddDao() {
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+
+			con = DriverManager.getConnection("jdbc:mysql://localhost/bdd_pizzeria, «root», «»");
+
+		} catch (ClassNotFoundException e) {
+			LOG.error("Impossible de charger le pilote jdbc");
+		} catch (SQLException e) {
+			LOG.error("SQL Exception");
+		}
+	}
 
 	public List<Pizza> findAllPizzas() {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<Pizza> listpizzas = new ArrayList<Pizza>();
+
+		try {
+
+			PreparedStatement insertPizza = con
+					.prepareStatement("SELECT PIZZA WHERE ID =? AND CODE=? AND NAME=? AND PRICE=?");
+
+			ResultSet resultats = insertPizza.executeQuery();
+
+			while (resultats.next())
+				listpizzas.add(new Pizza(resultats.getInt("ID"), resultats.getString("CODE"),
+						resultats.getString("NAME"), resultats.getDouble("PRICE")));
+			resultats.close();
+
+		} catch (SQLException e) {
+			LOG.error("SQL Exception");
+		}
+		return listpizzas;
+
 	}
 
 	public void saveNewPizza(Pizza pizza) {
-		// TODO Auto-generated method stub
 
+		try {
+
+			PreparedStatement saveNewPizza = con
+					.prepareStatement("INSERT PIZZA WHERE ID =? AND CODE=? AND NAME=? AND PRICE=?");
+
+			saveNewPizza.setInt(1, pizza.getId());
+			saveNewPizza.setString(2, pizza.getCode());
+			saveNewPizza.setString(3, pizza.getLibelle());
+			saveNewPizza.setDouble(4, pizza.getPrix());
+
+			saveNewPizza.executeUpdate();
+
+			saveNewPizza.close();
+
+		} catch (SQLException e) {
+			LOG.error("SQL Exception");
+		}
 	}
 
 	public void updatePizza(String codePizza, Pizza pizza) {
-		// TODO Auto-generated method stub
+		try {
 
+			PreparedStatement updatePizza = con
+					.prepareStatement("UPDATE PIZZA (CODE, NAME, PRIX) VALUES (?, ?, ?) WHERE ID = ?");
+
+			updatePizza.setInt(1, pizza.getId());
+			updatePizza.setString(2, pizza.getCode());
+			updatePizza.setString(3, pizza.getLibelle());
+			updatePizza.setDouble(4, pizza.getPrix());
+
+			updatePizza.executeUpdate();
+
+			updatePizza.close();
+
+		} catch (SQLException e) {
+			LOG.error("SQL Exception");
+		}
 	}
 
 	public void deletePizza(String codePizza) {
-		// TODO Auto-generated method stub
+		try {
 
+			PreparedStatement deletePizza = con.prepareStatement("DELETE PIZZA WHERE CODE = ?");
+
+			deletePizza.setString(1, codePizza);
+			deletePizza.executeUpdate();
+			deletePizza.close();
+
+		} catch (SQLException e) {
+			LOG.error("SQL Exception");
+		}
 	}
 
 	public Pizza findPizzaByCode(String codePizza) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Pizza piz = null;
+
+		try {
+
+			PreparedStatement findPizzaByCode = con.prepareStatement("SELECT * FROM PIZZAS WHERE CODE = ?");
+
+			ResultSet resultats = findPizzaByCode.executeQuery();
+
+			findPizzaByCode.setString(1, codePizza);
+			piz = new Pizza(resultats.getInt("ID"), resultats.getString("CODE"), resultats.getString("NAME"),
+					resultats.getDouble("PRICE"));
+
+			findPizzaByCode.executeQuery();
+			findPizzaByCode.close();
+
+		} catch (SQLException e) {
+			LOG.error("SQL Exception");
+		}
+
+		return piz;
 	}
 
 	public boolean pizzaExists(String codePizza) {
